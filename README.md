@@ -2,6 +2,10 @@
 
 Scan the commits for a given repository.
 
+## Installing Node.js
+
+This tool requires Node.js, we recommend using [nvm](https://github.com/nvm-sh/nvm).
+
 ## Usage
 
 1. fetch a [personal access token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) from GitHub.
