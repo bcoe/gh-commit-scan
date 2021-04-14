@@ -19,9 +19,11 @@
 
 const { hideBin } = require('yargs/helpers')
 const inquirer = require('inquirer')
-const yargs = require('yargs')
-const { Octokit } = require('@octokit/rest')
-const open = require('open')
+const {readFileSync} = require('fs');
+const {spawnSync} = require('child_process');
+const yargs = require('yargs');
+const { Octokit } = require('@octokit/rest');
+const open = require('open');
 
 yargs(hideBin(process.argv)).command('* <repo>', 'eyeball commit history of repository', yargs => {
   yargs.positional('repo', {
@@ -57,6 +59,54 @@ yargs(hideBin(process.argv)).command('* <repo>', 'eyeball commit history of repo
     if (answer.commit === 'suspicious') {
       console.info(`${argv.repo} had suspicious activity, please report`)
       process.exit(1)
+    }
+  }
+})
+.command('scan-tags', 'examine release tags, ensure they point to main branch (must be run in repository)', yargs => {
+  yargs.positional('repo', {
+    describe: 'repository to list commits for, format owner/repo'
+  })
+}, async argv => {
+  const octokit = new Octokit({
+    auth: argv.token
+  })
+  const pkg = JSON.parse(readFileSync('./package.json'));
+  const repository = pkg?.repository?.url ? pkg.repository.url : pkg.repository
+  const [owner, repo] = repository.split('/');
+  const latestGH = (await octokit.rest.repos.getLatestRelease({
+    owner,
+    repo,
+  })).data.name.replace('v', '');
+  const result = spawnSync('npm', ['dist-tag', 'ls']).stdout.toString('utf8');
+  const latestNPM = result.match(/latest: (?<version>.*)/).groups.version;
+  const tags = [];
+  if (latestNPM !== latestGH) {
+    console.info('latest version on npm does not match GitHub');
+  } else {
+    console.info(`gh = ${latestGH} npm = ${latestNPM}`);
+  }
+  for await (const response of octokit.paginate.iterator(
+    octokit.rest.repos.listTags,
+    {
+      owner,
+      repo,
+    }
+  )) {
+    for (const tag of response.data) {
+      tags.push(tag);
+    }
+  }
+  console.info('total tags', tags.length);
+  let i = 0;
+  for (const tag of tags) {
+    const result = spawnSync('git', ['branch', '--contains', tag.commit.sha]);
+    if (result.status !== 0 || !result.stdout.toString('utf8').includes('* master')) {
+      console.info(`${owner}/${repo} could not find ${tag.name} on main branch`);
+    } else {
+      if ((++i % 5) === 0) {
+        console.info(result.stdout.toString('utf8'));
+        return;
+      }
     }
   }
 })
