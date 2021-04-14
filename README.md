@@ -9,7 +9,7 @@ This tool requires Node.js, we recommend using [nvm](https://github.com/nvm-sh/n
 ## Usage
 
 1. fetch a [personal access token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) from GitHub.
-2. install the tool from npm, `npm i gh-commit-scan -g`.
+2. install the tool from npm, `npm i @googleapis/gh-commit-scan -g`.
 3. run the tool thusly:
     ```
     gh-commit-scan --token=abc123 github-project/github-repo
