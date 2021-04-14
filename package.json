@@ -1,9 +1,9 @@
 {
   "name": "@googleapis/gh-commit-scan",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "scan commits in git repository",
   "main": "index.js",
-  "bin": "node index.js",
+  "bin": "index.js",
   "repository": "bcoe/gh-commit-scan",
   "scripts": {
     "test": "standardx",
