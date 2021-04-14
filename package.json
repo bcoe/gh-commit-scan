@@ -1,0 +1,27 @@
+{
+  "name": "gh-commit-scan",
+  "version": "1.0.0",
+  "description": "scan commits to git repository",
+  "main": "index.js",
+  "bin": "node index.js",
+  "scripts": {
+    "test": "standardx",
+    "fix": "standardx --fix"
+  },
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "diff",
+    "gh"
+  ],
+  "author": "Ben Coe <bencoe@google.com>",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@octokit/rest": "^18.5.2",
+    "inquirer": "^8.0.0",
+    "open": "^8.0.5",
+    "standardx": "^7.0.0",
+    "yargs": "^17.0.0-candidate.12"
+  }
+}
