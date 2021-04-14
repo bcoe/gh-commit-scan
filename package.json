@@ -16,7 +16,6 @@
     "diff",
     "gh"
   ],
-  ""
   "author": "Ben Coe <bencoe@google.com>",
   "license": "Apache-2.0",
   "dependencies": {
