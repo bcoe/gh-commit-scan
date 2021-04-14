@@ -4,6 +4,7 @@
   "description": "scan commits in git repository",
   "main": "index.js",
   "bin": "node index.js",
+  "repository": "bcoe/gh-commit-scan",
   "scripts": {
     "test": "standardx",
     "fix": "standardx --fix"
@@ -15,6 +16,7 @@
     "diff",
     "gh"
   ],
+  ""
   "author": "Ben Coe <bencoe@google.com>",
   "license": "Apache-2.0",
   "dependencies": {
